@@ -24,13 +24,13 @@ def Draw_Points(list_points):
     map.save("Map_Points.html")
 
 # URL de la API
-api_url = 'http://172.23.211.214:5000/obtener_puntos'
+api_url = 'http://192.168.0.14:5000/obtener_puntos?usuario_id=1050440799'
 
 response = requests.get(api_url)
 
 if response.status_code == 200:
     puntos_data = response.json()['puntos']
-    puntos_para_mapa = [(f'Point: {p["id"]}', f'Date: {p["fecha"]}', p['latitud'], p['longitud']) for p in puntos_data]
+    puntos_para_mapa = [(f'Date: {p["fecha"]}',f'Point: {p["id"]}', p['latitud'], p['longitud']) for p in puntos_data]
     print(puntos_para_mapa)
     Draw_Points(puntos_para_mapa)
 else:
