@@ -1,16 +1,19 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-
+from pytz import timezone
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import text
 
 app = Flask(__name__)
-
+# Configura la zona horaria en "America/Bogota'"
+tz = timezone('America/Bogota')  # Puedes cambiar 'America/Bogota' por la zona horaria que desees
 # Configura la base de datos MySQL utilizando mysql-connector-python
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:12345@35.199.118.43:3306/apirest'
 
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost/apirest'
+
 
 db = SQLAlchemy(app)
 # Modelo para la tabla de usuarios
@@ -25,7 +28,7 @@ class Punto(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     latitud = db.Column(db.String(20), nullable=False)
     longitud = db.Column(db.String(20), nullable=False)
-    fecha = db.Column(db.DateTime, default=datetime.utcnow)
+    fecha = db.Column(db.DateTime, default=lambda: datetime.now(tz))
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
 
 @app.route('/agregar_usuario', methods=['POST'])
@@ -98,11 +101,17 @@ def eliminar_puntos():
         num_registros_eliminados = db.session.query(Punto).delete()
         db.session.commit()
 
-        return jsonify({'message': f'Se eliminaron {num_registros_eliminados} registros correctamente'}), 200
+        # Reiniciar la secuencia de incremento del campo "id" en MySQL
+        if db.engine.dialect.name == 'mysql':
+            db.session.execute(text('ALTER TABLE punto AUTO_INCREMENT = 1'))
+            db.session.commit()
+
+        return jsonify({'message': f'Se eliminaron {num_registros_eliminados} registros correctamente y la secuencia de "id" se reinició'}), 200
     except Exception as e:
         app.logger.error(f'Error al eliminar puntos: {str(e)}')
         db.session.rollback()
         return jsonify({'error': 'Ocurrió un error al eliminar los registros'}), 500
+
     
 @app.route('/', methods=['GET'])
 def index():
@@ -111,7 +120,7 @@ def index():
 if __name__ == '__main__':
     #with app.app_context():
         #db.create_all()
-    app.run()
-
-    #app.run(host='0.0.0.0', port=5000, debug=True)
+    #app.run()
+    #app.run(host='192.168.0.36', port=5000, debug=True)
+    app.run(host='192.168.0.36', port=5000, debug=True)
     
