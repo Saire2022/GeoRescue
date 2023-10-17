@@ -1,24 +1,25 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-from pytz import timezone
+
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from pytz import timezone
+
 from sqlalchemy import text
 
+
 app = Flask(__name__)
-# Configura la zona horaria en "America/Bogota'"
-tz = timezone('America/Bogota')  # Puedes cambiar 'America/Bogota' por la zona horaria que desees
+tz = timezone('America/Bogota')  
 # Configura la base de datos MySQL utilizando mysql-connector-python
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:12345@35.199.118.43:3306/apirest'
 
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost/apirest'
 
-
 db = SQLAlchemy(app)
 # Modelo para la tabla de usuarios
 class Usuario(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String(10), primary_key=True)
     nombre = db.Column(db.String(100), nullable=False)
     apellido = db.Column(db.String(100), nullable=True)
     puntos = db.relationship('Punto', backref='usuario', lazy=True)
@@ -78,7 +79,7 @@ def obtener_puntos():
     puntos_json = [{'id': punto.id, 'latitud': punto.latitud, 'longitud': punto.longitud, 'fecha': punto.fecha, 'usuario_id': punto.usuario_id} for punto in puntos]
     return jsonify({'puntos': puntos_json})
 
-@app.route('/eliminar_puntos/<int:usuario_id>', methods=['DELETE'])
+@app.route('/eliminar_puntos/<string:usuario_id>', methods=['DELETE'])
 def eliminar_puntos_por_usuario(usuario_id):
     # Verificar si el usuario existe en la base de datos
     usuario = Usuario.query.get(usuario_id)
@@ -106,13 +107,71 @@ def eliminar_puntos():
             db.session.execute(text('ALTER TABLE punto AUTO_INCREMENT = 1'))
             db.session.commit()
 
-        return jsonify({'message': f'Se eliminaron {num_registros_eliminados} registros correctamente y la secuencia de "id" se reinició'}), 200
+        return jsonify({'message': f'Se eliminaron {num_registros_eliminados} registros correctamente'}), 200
     except Exception as e:
         app.logger.error(f'Error al eliminar puntos: {str(e)}')
         db.session.rollback()
         return jsonify({'error': 'Ocurrió un error al eliminar los registros'}), 500
-
     
+# Endpoint para eliminar un usuario por ID
+@app.route('/eliminar_usuario/<string:id>', methods=['DELETE'])
+def eliminar_usuario(id):
+    usuario = Usuario.query.get(id)
+    if usuario is None:
+        return jsonify({'error': 'Usuario no encontrado'}), 404
+
+    db.session.delete(usuario)
+    db.session.commit()
+
+    return jsonify({'message': f'Usuario con ID {id} eliminado correctamente'}), 200
+
+# Endpoint para eliminar todos los usuarios
+@app.route('/eliminar_usuarios', methods=['DELETE'])
+def eliminar_usuarios():
+    try:
+        num_usuarios_eliminados = db.session.query(Usuario).delete()
+        db.session.commit()
+        return jsonify({'message': f'Se eliminaron {num_usuarios_eliminados} usuarios correctamente'}), 200
+    except Exception as e:
+        app.logger.error(f'Error al eliminar usuarios: {str(e)}')
+        db.session.rollback()
+        return jsonify({'error': 'Ocurrió un error al eliminar los usuarios'}), 500
+    
+# New route to get points by user
+@app.route('/obtener_puntos_por_usuario/<string:usuario_id>', methods=['GET'])
+def obtener_puntos_por_usuario(usuario_id):
+    puntos = Punto.query.filter_by(usuario_id=usuario_id).all()
+    if not puntos:
+        return jsonify({'error': 'No se encontraron puntos para el usuario con ID ' + usuario_id}), 404
+
+    puntos_json = [{'id': punto.id, 'latitud': punto.latitud, 'longitud': punto.longitud, 'fecha': punto.fecha, 'usuario_id': punto.usuario_id} for punto in puntos]
+    return jsonify({'puntos': puntos_json})
+
+# New route to get points within a time range for a specific user
+@app.route('/obtener_puntos_por_rango_de_tiempo/<string:usuario_id>', methods=['GET'])
+def obtener_puntos_por_rango_de_tiempo(usuario_id):
+    # Get the start and end time range from the request
+    start_time_str = request.args.get('start_time')
+    end_time_str = request.args.get('end_time')
+
+    if not start_time_str or not end_time_str:
+        return jsonify({'error': 'Los parámetros start_time y end_time son requeridos'}), 400
+
+    # Parse the start and end time strings to datetime objects
+    tz = timezone('America/Bogota')
+    start_time = datetime.strptime(start_time_str, '%Y-%m-%d %H:%M:%S').astimezone(tz)
+    end_time = datetime.strptime(end_time_str, '%Y-%m-%d %H:%M:%S').astimezone(tz)
+
+    # Query the points within the specified time range for the given user
+    puntos = Punto.query.filter_by(usuario_id=usuario_id).filter(Punto.fecha >= start_time, Punto.fecha <= end_time).all()
+
+    if not puntos:
+        return jsonify({'error': 'No se encontraron puntos para el usuario con ID ' + usuario_id + ' en el rango de tiempo especificado'}), 404
+
+    puntos_json = [{'id': punto.id, 'latitud': punto.latitud, 'longitud': punto.longitud, 'fecha': punto.fecha, 'usuario_id': punto.usuario_id} for punto in puntos]
+    return jsonify({'puntos': puntos_json})
+
+
 @app.route('/', methods=['GET'])
 def index():
     return '¡Hola, esta es la página de inicio de mi API!'
@@ -120,7 +179,4 @@ def index():
 if __name__ == '__main__':
     #with app.app_context():
         #db.create_all()
-    #app.run()
-    #app.run(host='192.168.0.36', port=5000, debug=True)
-    app.run(host='192.168.0.36', port=5000, debug=True)
-    
+    app.run(host='0.0.0.0', port=8080)

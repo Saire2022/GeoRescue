@@ -23,15 +23,51 @@ def Draw_Points(list_points):
         map.add_child(folium.Marker([point[2], point[3]], popup=(str(point[0]),str(point[1]),f'Lat: {str(point[2])}',f'Lng: {str(point[3])}')))
     map.save("Map_Points.html")
 
-# URL de la API
-api_url = 'http://192.168.0.14:5000/obtener_puntos?usuario_id=1050440799'
+# Function to draw points according to reques 
+def get_points_and_draw_map(api_url):
+    response = requests.get(api_url)
 
-response = requests.get(api_url)
+    if response.status_code == 200:
+        puntos_data = response.json()['puntos']
+        puntos_para_mapa = [(f'Date: {p["fecha"]}', f'Point: {p["id"]}', p['latitud'], p['longitud']) for p in puntos_data]
+        print(puntos_para_mapa)
+        Draw_Points(puntos_para_mapa)
+    else:
+        print(f'(Error {response.status_code}): {response.text}')
 
-if response.status_code == 200:
-    puntos_data = response.json()['puntos']
-    puntos_para_mapa = [(f'Date: {p["fecha"]}',f'Point: {p["id"]}', p['latitud'], p['longitud']) for p in puntos_data]
-    print(puntos_para_mapa)
-    Draw_Points(puntos_para_mapa)
-else:
-    print('Error al obtener la lista de puntos:', response.status_code)
+# Then you can call this function in your main code with the desired URL
+#url = 'http://192.168.0.36:8080/obtener_puntos_por_usuario/1003818497'
+#get_points_and_draw_map(url)
+
+
+
+################# Idea de como graficar#######################33
+print('Select the mode that you want to plot the point')
+print('1.- By user')
+print('2.- By an interval of time and user')
+print('3.- All points')
+option = input("Please, select one: ")
+if int(option)==1:
+    url = 'http://192.168.0.36:8080/obtener_puntos_por_usuario/'
+    user_id=input("Please, put the id: ")
+    full_url = url+user_id
+    get_points_and_draw_map(full_url)
+    #print(full_url)
+elif int(option)==2:
+    url = 'http://192.168.0.36:8080/obtener_puntos_por_rango_de_tiempo/'
+    user_id=input("Please, put the id: ")
+    url = url+user_id+"?start_time="
+    date=input("Please, the start date (yy-mm-dd): ")
+    url=url+date+"%20"
+    hour_s=input("Please, the start hour (hh-mm-ss): ")
+    url=url+hour_s+"&end_time="
+    date_end=input("Please, the end date (yy-mm-dd): ")
+    url=url+date_end+"%20"
+    hour_end=input("Please, the end hour (hh-mm-ss): ")
+    full_url=url+hour_end
+    get_points_and_draw_map(full_url)
+elif int(option)==3:
+    url = 'http://192.168.0.36:8080/obtener_puntos'
+    get_points_and_draw_map(url)
+
+
