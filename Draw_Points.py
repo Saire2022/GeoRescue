@@ -1,6 +1,23 @@
 import folium
 import requests
 from geopy.geocoders import Nominatim
+#Custom Class 'Point' and overload the + operator to combine two Point objects, resulting in a new Point object.
+
+class Point:
+    def __init__(self, date, point, lat, lon):
+        self.date = date
+        self.point = point
+        self.lat = lat
+        self.lon = lon
+
+    def __add__(self, other):
+        # Overload the '+' operator to create a new Point with combined information
+        combined_date = f'{self.date} and {other.date}'
+        combined_point = f'{self.point} and {other.point}'
+        combined_lat = (self.lat + other.lat) / 2
+        combined_lon = (self.lon + other.lon) / 2
+        return Point(combined_date, combined_point, combined_lat, combined_lon)
+
 
 def Draw_Points(list_points):
     """Draws points on a map."""
@@ -70,4 +87,12 @@ elif int(option)==3:
     url = 'http://192.168.0.36:8080/obtener_puntos'
     get_points_and_draw_map(url)
 
+
+###########################
+# Now, you can create Point objects and use the overloaded '+' operator to combine them.
+point1 = Point('Date1', 'Point1', 12.345, 67.890)
+point2 = Point('Date2', 'Point2', 23.456, 78.901)
+
+combined_point = point1 + point2
+print(f'Combined Point: Date: {combined_point.date}, Point: {combined_point.point}, Lat: {combined_point.lat}, Lon: {combined_point.lon}')
 
