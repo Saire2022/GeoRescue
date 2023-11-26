@@ -88,8 +88,10 @@ elif int(option)==3:
     get_points_and_draw_map(url)
 
 
+
+
+
 ###########################
-# Now, you can create Point objects and use the overloaded '+' operator to combine them.
 point1 = Point('Date1', 'Point1', 12.345, 67.890)
 point2 = Point('Date2', 'Point2', 23.456, 78.901)
 

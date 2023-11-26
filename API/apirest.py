@@ -11,8 +11,8 @@ from sqlalchemy import text
 
 app = Flask(__name__)
 tz = timezone('America/Bogota')  
-# Configura la base de datos MySQL utilizando mysql-connector-python
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:12345@35.199.118.43:3306/apirest'
+# Configura la base de datos MySQL utilizando mysql-connector-pyhon
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:db2023LOCATION@34.176.104.247:3306/db_get_location'
 
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost/apirest'
 
@@ -30,7 +30,8 @@ class Punto(db.Model):
     latitud = db.Column(db.String(20), nullable=False)
     longitud = db.Column(db.String(20), nullable=False)
     fecha = db.Column(db.DateTime, default=lambda: datetime.now(tz))
-    usuario_id = db.Column(db.Integer, db.ForeignKey('usuario.id'), nullable=False)
+    usuario_id = db.Column(db.String(10), db.ForeignKey('usuario.id'), nullable=False)
+
 
 @app.route('/agregar_usuario', methods=['POST'])
 def agregar_usuario():
@@ -150,33 +151,29 @@ def obtener_puntos_por_usuario(usuario_id):
 # New route to get points within a time range for a specific user
 @app.route('/obtener_puntos_por_rango_de_tiempo/<string:usuario_id>', methods=['GET'])
 def obtener_puntos_por_rango_de_tiempo(usuario_id):
-    # Get the start and end time range from the request
     start_time_str = request.args.get('start_time')
     end_time_str = request.args.get('end_time')
 
     if not start_time_str or not end_time_str:
         return jsonify({'error': 'Los parámetros start_time y end_time son requeridos'}), 400
 
-    # Parse the start and end time strings to datetime objects
-    tz = timezone('America/Bogota')
     start_time = datetime.strptime(start_time_str, '%Y-%m-%d %H:%M:%S').astimezone(tz)
     end_time = datetime.strptime(end_time_str, '%Y-%m-%d %H:%M:%S').astimezone(tz)
 
-    # Query the points within the specified time range for the given user
     puntos = Punto.query.filter_by(usuario_id=usuario_id).filter(Punto.fecha >= start_time, Punto.fecha <= end_time).all()
 
     if not puntos:
         return jsonify({'error': 'No se encontraron puntos para el usuario con ID ' + usuario_id + ' en el rango de tiempo especificado'}), 404
 
-    puntos_json = [{'id': punto.id, 'latitud': punto.latitud, 'longitud': punto.longitud, 'fecha': punto.fecha, 'usuario_id': punto.usuario_id} for punto in puntos]
+    puntos_json = [{'id': punto.id, 'latitud': punto.latitud, 'longitud': punto.longitud, 'fecha': punto.fecha.strftime('%Y-%m-%d %H:%M:%S %Z'), 'usuario_id': punto.usuario_id} for punto in puntos]
     return jsonify({'puntos': puntos_json})
-
 
 @app.route('/', methods=['GET'])
 def index():
-    return '¡Hola, esta es la página de inicio de mi API!'
+    return '¡Hola, esta es la página de inicio de mi API!2222222'
 
 if __name__ == '__main__':
     #with app.app_context():
-        #db.create_all()
+    #    db.create_all()
     app.run(host='0.0.0.0', port=8080)
+    
