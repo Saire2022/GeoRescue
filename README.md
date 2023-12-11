@@ -37,4 +37,4 @@ You can run the script both locally and in an instance of Colab or Jupyter Noteb
 - Please end date (yy:mm:dd): `2023-11-26`
 - Please end time (hh:mm:ss): `15:00:00`
 
-Number of points: `4`
+This script returns the `.html` file with the interactive maps with the points and the routes.
