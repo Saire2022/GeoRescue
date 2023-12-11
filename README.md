@@ -27,16 +27,16 @@ Draw_points.py
 Enter your username: 1234567890 \
 Enter your password: ****** \
 - The following menu will be displayed:
-1.- Per user
-2.- By time interval and user
-3.- All points
-Please select one: 2
+   1.- Per user
+   2.- By time interval and user
+   3.- All points
+   Please select one: 2
 - In this case we have selected 2 and we will be asked to enter the data with the required format as shown below:
 
-Draw points with Path? (Y/N): n
-Please enter the id: 1050440799
-Please start date (yy-mm-dd): 2023-11-26
-Please start time (hh:mm:ss): 13:00:00
-Please end date (yy:mm:dd): 2023-11-26
-Please end time (hh:mm:ss): 15:00:00
-Number of points: 4
+   Draw points with Path? (Y/N): n
+   Please enter the id: 1050440799
+   Please start date (yy-mm-dd): 2023-11-26
+   Please start time (hh:mm:ss): 13:00:00
+   Please end date (yy:mm:dd): 2023-11-26
+   Please end time (hh:mm:ss): 15:00:00
+   Number of points: 4
