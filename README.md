@@ -13,7 +13,7 @@ The API runs on a Google Cloud Platform (GCP) server that allows us to connect t
 If you want to run the API locally, you must follow these steps:
 - Clone this repository in the desired directory.
 - Create a virtual environment in the directory, for example:
-.\Venv\Scripts\activate.
+.\Venv\Scripts\activate. 
 - Activate the virtual environment:
  .\Venv\Scripts activate
 - Run the file apirest.py:
@@ -23,9 +23,9 @@ python apirest.py
 
 You can run the script both locally and in an instance of Colab or Jupyter Notebook, using the following command:
 Draw_points.py
-- Enter administrator username and password: \
+- Enter administrator username and password: 
 Enter your username: 1234567890 \
-Enter your password: ****** \
+Enter your password: ****** 
 - The following menu will be displayed:
    1.- Per user
    2.- By time interval and user
