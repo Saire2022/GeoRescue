@@ -2,9 +2,9 @@
 DSL creation for tracking people on disasters.
 
 ## API
-The Aplication Program Interface (API) is available in the following Documentation \\
+The Aplication Program Interface (API) is available in the following Documentation \
 
-API URL: https://apirest-qywgms5y2q-ue.a.run.app/?fbclid=IwAR0IbPBfwr7tippjae8Ug3jlF4qv1g8hSJwK9D63o4XkopMzikZ2A_TN55c \\
+API URL: https://apirest-qywgms5y2q-ue.a.run.app/?fbclid=IwAR0IbPBfwr7tippjae8Ug3jlF4qv1g8hSJwK9D63o4XkopMzikZ2A_TN55c \
 
 DPCUMENTATION URL: https://documenter.getpostman.com/view/27080186/2s9YkgEkzd 
 
@@ -23,9 +23,9 @@ python apirest.py
 
 You can run the script both locally and in an instance of Colab or Jupyter Notebook, using the following command:
 Draw_points.py
-- Enter administrator username and password:
-Enter your username: 1234567890
-Enter your password: ******
+- Enter administrator username and password: \
+Enter your username: 1234567890 \
+Enter your password: ****** \
 - The following menu will be displayed:
 1.- Per user
 2.- By time interval and user
