@@ -22,5 +22,5 @@ COPY . .
 # Expose the port on which your app will run
 EXPOSE 8080
 
-# Define the command to run your application
+# Define the command to run your applicatioN
 CMD ["python", "apirest.py"]
