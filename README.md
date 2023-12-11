@@ -25,9 +25,9 @@ You can run the script both locally and in an instance of Colab or Jupyter Noteb
    - Enter your password: `******`
 2. The following menu will be displayed:
 
-   `1.- Per user \
-   2.- By time interval and user \
-   3.- All points \
+   `1.- Per user \n
+   2.- By time interval and user \n
+   3.- All points \n
    Please select one: 2`
 3. In this case, we have selected `2`, and we will be asked to enter the data in the required format:
 - Draw points with Path? (Y/N): `n`
