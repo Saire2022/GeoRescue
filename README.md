@@ -1,6 +1,5 @@
 # GeoRescue
-DSL creation for tracking people during disasters.
-
+Creation of DSL to track people after, during and after natural disasters provide immediate assistance and save many lives.
 ## API
 The Application Programming Interface (API) documentation is available [here](https://documenter.getpostman.com/view/27080186/2s9YkgEkzd).
 
@@ -38,3 +37,5 @@ You can run the script both locally and in an instance of Colab or Jupyter Noteb
 - Please end time (hh:mm:ss): `15:00:00`
 
 This script returns the `.html` file with the interactive maps with the points and the routes.
+
+The part of the mobile application that allows us to obtain user points can be found [here](https://github.com/SantiagoAjala0204/GetUserLocation.git)
