@@ -15,7 +15,7 @@ If you want to run the API locally, you must follow these steps:
 - Create a virtual environment in the directory, for example: \
 .\Venv\Scripts\activate. 
 - Activate the virtual environment: \
- ```.\Venv\Scripts activate
+.\Venv\Scripts activate
 - Run the file apirest.py: \ 
 python apirest.py
 
