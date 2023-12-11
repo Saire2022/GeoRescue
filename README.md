@@ -2,9 +2,11 @@
 DSL creation for tracking people on disasters.
 
 ## API
-The Aplication Program Interface (API) is available in the following Documentation:
-API URL: https://apirest-qywgms5y2q-ue.a.run.app/?fbclid=IwAR0IbPBfwr7tippjae8Ug3jlF4qv1g8hSJwK9D63o4XkopMzikZ2A_TN55c
-DPCUMENTATION URL: https://documenter.getpostman.com/view/27080186/2s9YkgEkzd
+The Aplication Program Interface (API) is available in the following Documentation \\
+
+API URL: https://apirest-qywgms5y2q-ue.a.run.app/?fbclid=IwAR0IbPBfwr7tippjae8Ug3jlF4qv1g8hSJwK9D63o4XkopMzikZ2A_TN55c \\
+
+DPCUMENTATION URL: https://documenter.getpostman.com/view/27080186/2s9YkgEkzd 
 
 The API runs on a Google Cloud Platform (GCP) server that allows us to connect to the application and make requests to get the information from the database. In addition, the database is deployed in GCP Cloud SQL.
 
