@@ -12,11 +12,11 @@ The API runs on a Google Cloud Platform (GCP) server that allows us to connect t
 
 If you want to run the API locally, you must follow these steps:
 - Clone this repository in the desired directory.
-- Create a virtual environment in the directory, for example:
+- Create a virtual environment in the directory, for example: \
 .\Venv\Scripts\activate. 
-- Activate the virtual environment:
- .\Venv\Scripts activate
-- Run the file apirest.py:
+- Activate the virtual environment: \
+ ```.\Venv\Scripts activate
+- Run the file apirest.py: \ 
 python apirest.py
 
 ## SCRIPTS
