@@ -9,6 +9,7 @@ steps:
       - 'run'
       - 'deploy'
       - 'apirest'
-      - '--image=gcr.io/main-mechanism-401303/my-app'  # Include '=' for the argument value
+      - '--image'
+      - 'gcr.io/main-mechanism-401303/my-app'
       - '--platform'
       - 'managed'

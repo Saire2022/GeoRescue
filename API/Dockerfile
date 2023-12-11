@@ -3,9 +3,9 @@ FROM python:3.11
 
 # Set environment variables
 ENV CLOUD_SQL_USERNAME=root
-ENV CLOUD_SQL_PASSWORD=db2023LOCATION
-ENV CLOUD_SQL_DATABASE_NAME=db_get_location
-ENV CLOUD_SQL_CONNECTION_NAME=db-ubication:southamerica-west1:db-get-location
+ENV CLOUD_SQL_PASSWORD=DBapi@2023
+ENV CLOUD_SQL_DATABASE_NAME=apirest
+ENV CLOUD_SQL_CONNECTION_NAME=api-rest-401320:southamerica-west1:plapi2023
 
 # Set the working directory
 WORKDIR /app
